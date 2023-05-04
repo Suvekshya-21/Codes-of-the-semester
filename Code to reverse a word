@@ -1,0 +1,129 @@
+#include<iostream>
+using namespace std;
+
+
+void reverseSubstring(char str[], int start_loc, int end_loc)               //declaring and defining the reverseSubstring function
+{
+     
+    int i, j, temp, n;                                                      //initialising integer variables
+
+    n = (end_loc - start_loc) / 2;                                          //setting n as the mid-point of the words 
+    
+    for(i = 0; i < n; i++)                                                  //executing loop upto the mid-point of the word/sentence to reverse the word/sentence
+    {
+        temp = str[start_loc + i];                                          //swapping the letters to reverse the word/sentence
+        str[start_loc + i] = str[end_loc - i - 1];
+        str[end_loc - i - 1] = temp;
+
+    }
+    if(start_loc == 0 && str[end_loc + 1] == '\0')              //condition that starting location is the first index of array and ending location is the last index of the array
+        {
+            for(i = start_loc; str[i] != '\0'; i++)             //running loop to reverse the whole sentence if above condition is satisfied
+            {   
+                cout << str[i];                                 //printing the reverse of the entire sentence
+                if(str[i] == '\0')                              //checking if sentence has ended
+                {
+                    break;                                      //breaking the loop if sentence has ended
+                } 
+            }
+        }
+
+    else                                                    //condition that satisfies anything except above condition
+    {
+        for(i = start_loc; str[i] != '\0'; i++)             //starting loop from start of word till end of word
+        {   
+            if(str[i] == ' ' || str[i] == '\0')             //checking if word has ended 
+            {
+                break;                                      //breaking loop when word has ended
+            } 
+        }
+    }
+    
+    
+
+}
+
+void findNextword(char str[], int start_search_loc, int& wordStart, int& wordEnd)       //defining and declaring the findNextword function
+{
+    int i, n = 0;                   //initialising integers
+
+    while(true)                     //running an infinite loop    
+    {
+
+        if(start_search_loc == 0)       //this condition is executed if the search location is 0, which is the initial value
+        {
+            for(i = 0; str[i] != ' ' || '\0'; i++)      //increament loop until a blank space or end of character array is detected
+            {
+                wordStart = 0;                          //since search location is 0, the index of first word is zero
+                n++;                                    //increasing n for every iteration so that we get the length of the word 
+                
+            }
+
+            wordEnd = n;                                //n is the length of the word so wordEnd has the value of the last index of the word
+
+        }
+
+        else if(start_search_loc != 0)                  //this condition is executed if the search location is not 0
+        {
+            
+            if(str[start_search_loc] == ' ')            //nested if condition that is executed if the search location is in a blank space
+            {
+    
+                for(i = start_search_loc + 1; str[i] != true; i++)      //starting the loop from the next index of the blank space and running an infinity looop
+                {
+                    n++;                                            //increasing the value of n so that we find the endpoint of another word
+                    if(str[i] == '\0' || str[i] == ' ')             //condition to check whether the word has ended or the sentence has ended
+                        break;                                      //breaking the loop if the word has ended
+                }
+
+                wordStart = start_search_loc + 1;                   //declaring the wordStart variable as the index of the starting letter of the word
+                wordEnd = n;                                        //declaring the wordEnd variable as the index of the last letter of the word
+            }
+
+            else                                                //nested condition that is executed if search location is an integer != 0
+            {
+            for(i = start_search_loc; str[i] != true; i++)          //starting the loop from the start search location and running an infinite loop
+                {
+                    n++;                                            //increasing n until the word ends
+                    if(str[i] == '\0' || str[i] == ' ')
+                        break;                                      //breaking the loop when the word or the sentence ends
+                }
+
+                wordStart = start_search_loc + n;                   //declaring wordStart as the beginning index of the word
+                
+            for(i = wordStart; str[i]!= true; i++)                  //running loop from beginning index
+                {
+                    n++;                                            //increasing n until the word ends
+                    if(str[i] == '\0' || str[i] == ' ')             
+                        break;                                      //breaking the loop when the word or the sentence ends
+                    
+                }
+
+                wordEnd = wordStart + n;                            //declaring wordEnd as the last index of the word
+            }
+        }
+        
+        reverseSubstring(str,wordStart,wordEnd);                    //calling the reverseSubstring function for every iteration of the main loop
+        start_search_loc = wordEnd;                                 //declaring searching location as the wordEnd for every iteration so that the searching location changes every iteration
+
+      if(str[wordEnd] == '\0')                                      //condition to check if sentence has ended
+        break;                                                      //breaking the loop after sentence has ended
+
+    }
+
+
+    reverseSubstring(str,0, wordEnd);                       //calling the reverseSubstring function after the sentence is complete to reverse the entire array
+    
+}
+
+int main()
+{
+    char str[1000];                     //initialising string
+    int i, j, n, temp, a = 0, b = 0;    //initialising integers and declaring values of word start and word end
+
+    cout << "Enter the statement: ";    
+    cin.get(str,1000);                  //inputting string
+    
+    findNextword(str, 0, a, b);         //calling the findNextword function with parameter: characater array, searching location, word start and word end
+    
+}
